@@ -9,6 +9,8 @@ import { LoginModalProvider } from "./context/LoginModalContext/provider";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { AboutUs } from "./pages/AboutUs";
 import { Contacts } from "./pages/Contacts";
+import { Events } from "./pages/Events";
+import { Me } from "./pages/Me";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +22,7 @@ export const App = () => (
           <AppWrapper>
             <Routes>
               <Route index element={<Home />} />
+              <Route path="/events" element={<Events />} />
               <Route path="privacy-policy" element={<PrivacyPolicy />} />
               <Route path="terms-of-use" element={<TermsOfUse />} />
               <Route path="about" element={<AboutUs />} />
@@ -29,7 +32,7 @@ export const App = () => (
                 path="me"
                 element={
                   <PrivateRoute>
-                    <div>My Profile</div>
+                    <Me />
                   </PrivateRoute>
                 }
               />

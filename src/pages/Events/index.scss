@@ -1,0 +1,15 @@
+.events-page {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+  padding: $space-lg;
+
+  .events-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: $space-md;
+    width: 100%;
+    overflow-y: auto;
+  }
+}

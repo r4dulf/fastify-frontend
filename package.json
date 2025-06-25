@@ -17,6 +17,7 @@
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.58.1",
     "react-router-dom": "^7.6.2",
+    "use-local-storage-state": "^19.5.0",
     "zod": "^3.25.67"
   },
   "devDependencies": {

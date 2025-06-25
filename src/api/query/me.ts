@@ -8,7 +8,7 @@ type MeResponse =
 
 type MeQueryOptions = UseQueryOptions<MeResponse, Error>;
 
-export const useMeQuery = (options?: MeQueryOptions) =>
+export const useMeQuery = (options?: Partial<MeQueryOptions>) =>
   useQuery<MeResponse>({
     queryKey: [ME_KEY],
     queryFn: () => fetcher<MeResponse>("/me"),

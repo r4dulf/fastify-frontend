@@ -4,6 +4,10 @@ export const fetcher = async <T>(
   input: RequestInfo,
   init?: RequestInit
 ): Promise<T> => {
+  const token = JSON.parse(localStorage.getItem("token") || "null") as
+    | string
+    | null;
+
   const url =
     typeof input === "string" && input.startsWith("/")
       ? `${API_BASE}${input}`
@@ -14,7 +18,7 @@ export const fetcher = async <T>(
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token") ?? ""}`,
+      Authorization: token ? `Bearer ${token}` : "",
       ...(init?.headers || {}),
     },
   });

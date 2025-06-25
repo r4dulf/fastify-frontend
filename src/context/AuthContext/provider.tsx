@@ -1,32 +1,41 @@
-import { useCallback, type ReactNode } from "react";
+import { useCallback, useEffect, type ReactNode } from "react";
 import { useMeQuery } from "../../api/query/me";
 import { useQueryClient } from "@tanstack/react-query";
 import { AuthContext } from ".";
 import { useLoginMutation, useRegisterMutation } from "../../api/query/auth";
+import useLocalStorageState from "use-local-storage-state";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const queryClient = useQueryClient();
 
+  const [token, setToken] = useLocalStorageState<string | null>("token");
+
   const { mutateAsync: login, isPending: isLoginPending } = useLoginMutation();
   const { mutateAsync: register } = useRegisterMutation();
-  const { data: user, isLoading } = useMeQuery();
+  const {
+    data: user,
+    isLoading,
+    isError,
+  } = useMeQuery({ enabled: Boolean(token) });
 
-  const logout = useCallback(() => {
-    localStorage.removeItem("token");
+  const logout = useCallback(async () => {
+    setToken(null);
+
+    await queryClient.invalidateQueries();
     queryClient.clear();
-  }, [queryClient]);
+  }, [queryClient, setToken]);
 
   const loginCallback = useCallback(
     async ({ email, password }: { email: string; password: string }) => {
       try {
         const response = await login({ email, password });
 
-        localStorage.setItem("token", response.token);
+        setToken(response.token);
       } catch (error) {
         console.error("Login failed:", error);
       }
     },
-    [login]
+    [login, setToken]
   );
 
   const registerCallback = useCallback(
@@ -49,6 +58,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     },
     [register]
   );
+
+  useEffect(() => {
+    if (isError) {
+      logout();
+      console.error("An error occurred while fetching user data. Logging out.");
+    }
+  }, [isError, logout]);
 
   return (
     <AuthContext.Provider

@@ -1,0 +1,14 @@
+.my-events {
+  .columns {
+    display: flex;
+    flex-direction: column;
+    gap: $space-md;
+
+    .created,
+    .registered {
+      display: flex;
+      flex-direction: column;
+      gap: $space-md;
+    }
+  }
+}

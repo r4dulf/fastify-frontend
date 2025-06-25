@@ -1,0 +1,9 @@
+.home.page {
+  gap: $space-lg;
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: $space-md;
+  }
+}

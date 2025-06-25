@@ -9,9 +9,9 @@ import { LoginModalProvider } from "./context/LoginModalContext/provider";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { AboutUs } from "./pages/AboutUs";
 import { Contacts } from "./pages/Contacts";
-import { Me } from "./pages/Me";
 import { EventRoutes } from "./pages/Events/routes";
 import { Toaster } from "react-hot-toast";
+import { MeRoutes } from "./pages/Me/routes";
 
 const queryClient = new QueryClient();
 
@@ -29,10 +29,10 @@ export const App = () => (
               <Route path="about" element={<AboutUs />} />
               <Route path="contact" element={<Contacts />} />
               <Route
-                path="me"
+                path="/me/*"
                 element={
                   <PrivateRoute>
-                    <Me />
+                    <MeRoutes />
                   </PrivateRoute>
                 }
               />

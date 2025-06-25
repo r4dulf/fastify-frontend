@@ -44,7 +44,6 @@ export const EventPage = () => {
         <div className="event-details">
           <h1>{event.title}</h1>
 
-          <img src="https://placehold.co/1200x1200/EEE/31343C" alt="" />
           {event.imageUrl && (
             <img
               src={event.imageUrl}

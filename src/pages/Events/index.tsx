@@ -18,15 +18,17 @@ export const Events = () => {
     <div className="events-page">
       <h1>Events</h1>
 
-      {isLoading ? (
-        <div className="center-div">
-          <LoadingSpinner />
-        </div>
-      ) : data && data.length > 0 ? (
-        <EventsList events={data} />
-      ) : (
-        <p>No events found.</p>
-      )}
+      <div className="events-list-container">
+        {isLoading ? (
+          <div className="center-div">
+            <LoadingSpinner />
+          </div>
+        ) : data && data.length > 0 ? (
+          <EventsList events={data} />
+        ) : (
+          <p>No events found.</p>
+        )}
+      </div>
     </div>
   );
 };

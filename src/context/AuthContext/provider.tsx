@@ -20,8 +20,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = useCallback(async () => {
     setToken(null);
-
-    await queryClient.invalidateQueries();
     queryClient.clear();
   }, [queryClient, setToken]);
 
@@ -69,10 +67,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   return (
     <AuthContext.Provider
       value={{
-        user,
+        user: token ? user : undefined,
         isLoading: isLoading,
         isLoginPending,
-        isAuthenticated: !!user,
+        isAuthenticated: Boolean(token && user),
 
         register: registerCallback,
         login: loginCallback,

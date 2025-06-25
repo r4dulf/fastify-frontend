@@ -7,6 +7,7 @@ import { useAuth } from "../../../context/AuthContext/useAuth";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../Button";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email"),
@@ -32,17 +33,20 @@ export const AuthModal = ({ onClose }: { onClose: () => void }) => {
   const onSubmit = async (data: LoginFormValues) => {
     try {
       await login(data);
-      onClose();
 
-      // Redirect to home page after successful login
+      onClose();
       navigate("/");
+
+      toast.success("Logged in successfully!");
     } catch (err: unknown) {
       if (!(err instanceof Error)) {
+        toast.error("An unexpected error occurred.");
         console.error("Unexpected error:", err);
+
         return;
       }
 
-      console.error("Login error:", err.message);
+      toast.error("An error occurred while logging in.");
     }
   };
 

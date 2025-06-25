@@ -56,6 +56,7 @@ export const Header = () => {
             onClick={() => (isAuthenticated ? navigate("/me") : openModal())}
           >
             {!isLoading && (isAuthenticated ? "Account" : "Log In / Sign Up")}
+
             {isLoading && "Loading..."}
           </Button>
         </div>

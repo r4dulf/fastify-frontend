@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { AuthContext } from ".";
 import { useLoginMutation, useRegisterMutation } from "../../api/query/auth";
 import useLocalStorageState from "use-local-storage-state";
+import toast from "react-hot-toast";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const queryClient = useQueryClient();
@@ -20,20 +21,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = useCallback(async () => {
     setToken(null);
+
     queryClient.clear();
+
+    toast.success("You have been logged out successfully.");
   }, [queryClient, setToken]);
 
   const loginCallback = useCallback(
     async ({ email, password }: { email: string; password: string }) => {
-      try {
-        const response = await login({ email, password });
+      const response = await login({ email, password });
 
-        setToken(response.token);
-      } catch (error) {
-        console.error("Login failed:", error);
-      }
+      setToken(response.token);
+
+      queryClient.invalidateQueries();
     },
-    [login, setToken]
+    [login, queryClient, setToken]
   );
 
   const registerCallback = useCallback(
@@ -46,13 +48,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       email: string;
       password: string;
     }) => {
-      try {
-        const response = await register({ name, email, password });
+      const response = await register({ name, email, password });
 
-        localStorage.setItem("token", response.token);
-      } catch (error) {
-        console.error("Registration failed:", error);
-      }
+      localStorage.setItem("token", response.token);
     },
     [register]
   );
@@ -60,7 +58,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (isError) {
       logout();
-      console.error("An error occurred while fetching user data. Logging out.");
+
+      toast.error(
+        "An error occurred while fetching user data. Please log in again."
+      );
     }
   }, [isError, logout]);
 
@@ -71,6 +72,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isLoading: isLoading,
         isLoginPending,
         isAuthenticated: Boolean(token && user),
+        isAdmin: user?.role === "admin",
 
         register: registerCallback,
         login: loginCallback,

@@ -1,2 +1,43 @@
 .event-card {
+  flex: 1 1 250px;
+  max-width: 400px;
+  border: 1px solid $primary-color;
+  padding: $space-md;
+  border-radius: $border-radius-md;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: $space-md;
+
+  .event-date {
+    font-size: $font-size-small;
+    color: $primary-color;
+    font-weight: bold;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: $space-md;
+
+    p {
+      margin: 0;
+    }
+
+    .event-image {
+      height: 150px;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .event-description {
+      overflow: hidden;
+
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+  }
 }

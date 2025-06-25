@@ -1,0 +1,16 @@
+.event.page {
+  .event-details {
+    img {
+      width: 100%;
+      height: auto;
+      max-height: 500px;
+      border-radius: $border-radius-md;
+    }
+  }
+
+  .event-actions {
+    display: flex;
+    flex-direction: column;
+    gap: $space-sm;
+  }
+}

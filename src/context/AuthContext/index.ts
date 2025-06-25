@@ -6,6 +6,7 @@ type AuthContextType = {
   isLoading: boolean;
   isLoginPending: boolean;
   isAuthenticated: boolean;
+  isAdmin: boolean;
 
   register: (credentials: {
     name: string;

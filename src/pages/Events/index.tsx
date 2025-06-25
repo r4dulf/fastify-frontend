@@ -1,9 +1,10 @@
 import { useLocation } from "react-router-dom";
 import { useEventsQuery } from "../../api/query/events";
 import { SEARCH_PARAM_KEY } from "../../constants";
-import { EventCard } from "../../components/EventCard";
+import { EventsList } from "../../components/EventsList";
 
 import "./index.scss";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 export const Events = () => {
   const location = useLocation();
@@ -18,13 +19,11 @@ export const Events = () => {
       <h1>Events</h1>
 
       {isLoading ? (
-        <p>Loading events...</p>
-      ) : data && data.length > 0 ? (
-        <div className="events-list">
-          {data.map((event) => (
-            <EventCard key={event.key} event={event} />
-          ))}
+        <div className="center-div">
+          <LoadingSpinner />
         </div>
+      ) : data && data.length > 0 ? (
+        <EventsList events={data} />
       ) : (
         <p>No events found.</p>
       )}

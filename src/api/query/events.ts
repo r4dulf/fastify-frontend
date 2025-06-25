@@ -3,19 +3,25 @@ import type { paths } from "../../types/api";
 import { EVENTS_KEY } from "../keys";
 import { fetcher } from "../../lib/fetcher";
 
-type EventsResponse =
-  paths["/events"]["get"]["responses"]["200"]["content"]["application/json"];
-
+export type Event =
+  paths["/events"]["get"]["responses"]["200"]["content"]["application/json"][number];
 type EventsSearchParams = paths["/events"]["get"]["parameters"]["query"];
 
 export const useEventsQuery = (params?: EventsSearchParams) => {
-  return useQuery<EventsResponse>({
+  return useQuery<Event[]>({
     queryKey: [EVENTS_KEY, params],
     queryFn: () =>
-      fetcher<EventsResponse>(
+      fetcher<Event[]>(
         `/events${
           params?.search ? `?search=${encodeURIComponent(params.search)}` : ""
         }`
       ),
+  });
+};
+
+export const useEventQuery = (key: string) => {
+  return useQuery<Event>({
+    queryKey: [EVENTS_KEY, key],
+    queryFn: () => fetcher(`/events/${key}`),
   });
 };

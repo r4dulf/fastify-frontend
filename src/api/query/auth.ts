@@ -15,21 +15,21 @@ type RegisterBody =
 type RegisterResponse =
   paths["/auth/register"]["post"]["responses"]["200"]["content"]["application/json"];
 
-export const configureLoginMutation = (
-  queryClient: QueryClient
-): MutationOptions<LoginResponse, Error, LoginBody> => ({
+export const configureLoginMutation = (): MutationOptions<
+  LoginResponse,
+  Error,
+  LoginBody
+> => ({
   mutationFn: (data) =>
     fetcher<LoginResponse>("/auth/login", {
       method: "POST",
       body: JSON.stringify(data),
     }),
-
-  onSuccess: (data) => {
-    localStorage.setItem("token", data.token);
-
-    queryClient.invalidateQueries();
-  },
 });
+
+export const useLoginMutation = () => {
+  return useMutation(configureLoginMutation());
+};
 
 export const configureRegisterMutation = (
   queryClient: QueryClient
@@ -45,12 +45,6 @@ export const configureRegisterMutation = (
     queryClient.invalidateQueries();
   },
 });
-
-export const useLoginMutation = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation(configureLoginMutation(queryClient));
-};
 
 export const useRegisterMutation = () => {
   const queryClient = useQueryClient();

@@ -9,8 +9,9 @@ import { LoginModalProvider } from "./context/LoginModalContext/provider";
 import { PrivateRoute } from "./components/PrivateRoute";
 import { AboutUs } from "./pages/AboutUs";
 import { Contacts } from "./pages/Contacts";
-import { Events } from "./pages/Events";
 import { Me } from "./pages/Me";
+import { EventRoutes } from "./pages/Events/routes";
+import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient();
 
@@ -22,12 +23,11 @@ export const App = () => (
           <AppWrapper>
             <Routes>
               <Route index element={<Home />} />
-              <Route path="/events" element={<Events />} />
+              <Route path="/events/*" element={<EventRoutes />} />
               <Route path="privacy-policy" element={<PrivacyPolicy />} />
               <Route path="terms-of-use" element={<TermsOfUse />} />
               <Route path="about" element={<AboutUs />} />
               <Route path="contact" element={<Contacts />} />
-
               <Route
                 path="me"
                 element={
@@ -36,7 +36,11 @@ export const App = () => (
                   </PrivateRoute>
                 }
               />
+
+              <Route path="*" element={<Home />} />
             </Routes>
+
+            <Toaster position="bottom-center" />
           </AppWrapper>
         </AuthProvider>
       </LoginModalProvider>

@@ -1,0 +1,81 @@
+.button-wrapper {
+  button.button {
+    width: 100%;
+    height: 40px;
+    padding: 0 15px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    color: $milk-color;
+    background-color: $primary-color;
+    font-size: $font-size-base;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+
+    &.small {
+      height: 32px;
+      font-size: $font-size-small;
+    }
+
+    &.large {
+      height: 48px;
+      font-size: $font-size-large;
+    }
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+
+    &.tertiary {
+      background-color: transparent;
+      color: $white-color;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    &.secondary {
+      background-color: $secondary-color;
+      color: $primary-color;
+
+      &:hover {
+        background-color: darken($secondary-color, 10%);
+      }
+    }
+
+    &.danger {
+      background-color: $danger-color;
+      color: $white-color;
+
+      &:hover {
+        background-color: darken($danger-color, 10%);
+      }
+    }
+
+    &:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid transparent;
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
+}

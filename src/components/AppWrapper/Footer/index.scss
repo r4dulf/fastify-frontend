@@ -1,0 +1,36 @@
+footer {
+  background-color: $background-color;
+  border-top: 1px solid $primary-color;
+  padding: $space-md;
+  text-align: center;
+  background-color: $primary-color;
+  color: $milk-color;
+  font-size: $font-size-small;
+
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: $space-md;
+
+    .footer-nav {
+      display: flex;
+      gap: $space-sm;
+      justify-content: center;
+
+      a {
+        color: $milk-color;
+        text-decoration: none;
+
+        &:active,
+        &:focus,
+        &:visited {
+          color: $milk-color;
+        }
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

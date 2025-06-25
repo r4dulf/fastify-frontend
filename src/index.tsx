@@ -7,6 +7,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./context/AuthContext/provider";
 import { LoginModalProvider } from "./context/LoginModalContext/provider";
 import { PrivateRoute } from "./components/PrivateRoute";
+import { AboutUs } from "./pages/AboutUs";
+import { Contacts } from "./pages/Contacts";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +22,8 @@ export const App = () => (
               <Route index element={<Home />} />
               <Route path="privacy-policy" element={<PrivacyPolicy />} />
               <Route path="terms-of-use" element={<TermsOfUse />} />
+              <Route path="about" element={<AboutUs />} />
+              <Route path="contact" element={<Contacts />} />
 
               <Route
                 path="me"

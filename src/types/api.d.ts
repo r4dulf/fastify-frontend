@@ -75,6 +75,7 @@ export interface paths {
                                 date: string;
                                 location: string;
                                 createdByUserId: number;
+                                imageUrl?: string;
                             }[];
                             registered: {
                                 key: string;
@@ -83,6 +84,7 @@ export interface paths {
                                 date: string;
                                 location: string;
                                 createdByUserId: number;
+                                imageUrl?: string;
                             }[];
                         };
                     };
@@ -306,6 +308,7 @@ export interface paths {
                             date: string;
                             location: string;
                             createdByUserId: number;
+                            imageUrl?: string;
                         }[];
                     };
                 };
@@ -328,6 +331,7 @@ export interface paths {
                         /** Format: date-time */
                         date: string;
                         location: string;
+                        imageUrl?: string;
                     };
                 };
             };
@@ -382,6 +386,7 @@ export interface paths {
                             date: string;
                             location: string;
                             createdByUserId: number;
+                            imageUrl?: string;
                         };
                     };
                 };
@@ -389,6 +394,41 @@ export interface paths {
         };
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/events/{key}/image": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    key: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
         delete?: never;
         options?: never;
         head?: never;

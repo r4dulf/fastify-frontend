@@ -29,8 +29,16 @@ h6 {
 .page {
   display: flex;
   flex-direction: column;
+
   flex: 1;
   height: 100%;
+
+  .half {
+    align-self: center;
+    width: 50%;
+    min-width: 400px;
+    max-width: 600px;
+  }
 }
 
 .center-div {

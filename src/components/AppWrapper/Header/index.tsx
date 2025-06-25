@@ -10,7 +10,7 @@ import { LoginModalContext } from "../../../context/LoginModalContext";
 
 export const Header = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
 
   const [searchQuery, setSearchQuery] = useState("");
   const { isOpen, closeModal, openModal } = useContext(LoginModalContext);
@@ -52,9 +52,11 @@ export const Header = () => {
         <div className="account">
           <Button
             kind="tertiary"
+            disabled={isLoading}
             onClick={() => (isAuthenticated ? navigate("/me") : openModal())}
           >
-            {isAuthenticated ? "Account" : "Log In / Sign Up"}
+            {!isLoading && (isAuthenticated ? "Account" : "Log In / Sign Up")}
+            {isLoading && "Loading..."}
           </Button>
         </div>
       </div>

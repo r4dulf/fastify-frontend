@@ -1,11 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useEventQuery } from "../../../api/query/events";
+import { useEventQuery, usePutEvent } from "../../../api/query/events";
 import { LoadingSpinner } from "../../../components/LoadingSpinner";
 import { Button } from "../../../components/Button";
 import { useAuth } from "../../../context/AuthContext/useAuth";
 import toast from "react-hot-toast";
 
 import "./index.scss";
+import { useState } from "react";
+import { EventForm } from "./EventForm";
 
 export const EventPage = () => {
   const navigate = useNavigate();
@@ -13,6 +15,10 @@ export const EventPage = () => {
   const { user, isAdmin, isAuthenticated } = useAuth();
   const params = useParams<{ id: string }>();
   const { data: event, isLoading } = useEventQuery(params.id || "");
+
+  const { mutateAsync: putEvent } = usePutEvent();
+
+  const [isEditMode, setIsEditMode] = useState(false);
 
   if (isLoading) {
     return (
@@ -41,52 +47,81 @@ export const EventPage = () => {
   return (
     <div className="event page">
       <div className="half">
-        <div className="event-details">
-          <h1>{event.title}</h1>
+        {isEditMode ? (
+          <EventForm
+            isEditing
+            defaultValues={event}
+            onCancel={() => setIsEditMode(false)}
+            onSubmit={async (data) => {
+              try {
+                const formattedDate = new Date(data.date).toISOString();
 
-          {event.imageUrl && (
-            <img
-              src={event.imageUrl}
-              alt={event.title}
-              className="event-image"
-            />
-          )}
+                await putEvent({
+                  ...event,
+                  ...data,
+                  date: formattedDate,
+                });
 
-          <p className="event-date">
-            Date: {new Date(event.date).toLocaleDateString()}
-          </p>
+                toast.success("Event updated successfully!");
 
-          <p className="event-location">Location: {event.location}</p>
-          <p className="event-description">{event.description}</p>
-        </div>
-
-        <div className="event-actions">
-          {isEditable && (
-            <Button
-              kind="secondary"
-              onClick={() => navigate(`/events/${event.key}/edit`)}
-            >
-              Edit Event
-            </Button>
-          )}
-
-          <Button
-            kind="primary"
-            onClick={() => {
-              if (!isAuthenticated) {
-                toast.error("You must be logged in to register for an event.");
-
-                return;
+                setIsEditMode(false);
+              } catch {
+                toast.error("Failed to update event.");
               }
             }}
-          >
-            Register for Event
-          </Button>
+          />
+        ) : (
+          <>
+            <div className="event-details">
+              <h1>{event.title}</h1>
 
-          <Button kind="secondary" onClick={() => navigate("/events")}>
-            Back to Events
-          </Button>
-        </div>
+              {event.imageUrl && (
+                <img
+                  src={event.imageUrl}
+                  alt={event.title}
+                  className="event-image"
+                />
+              )}
+
+              <p className="event-date">
+                Date: {new Date(event.date).toLocaleDateString()}
+              </p>
+
+              <p className="event-location">Location: {event.location}</p>
+              <p className="event-description">{event.description}</p>
+            </div>
+
+            <div className="event-actions">
+              {isEditable && (
+                <Button
+                  kind="secondary"
+                  onClick={() => setIsEditMode(!isEditMode)}
+                >
+                  Edit Event
+                </Button>
+              )}
+
+              <Button
+                kind="primary"
+                onClick={() => {
+                  if (!isAuthenticated) {
+                    toast.error(
+                      "You must be logged in to register for an event."
+                    );
+
+                    return;
+                  }
+                }}
+              >
+                Register for Event
+              </Button>
+
+              <Button kind="secondary" onClick={() => navigate("/events")}>
+                Back to Events
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

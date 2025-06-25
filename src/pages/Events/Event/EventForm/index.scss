@@ -1,0 +1,19 @@
+form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    gap: $space-sm;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+    max-height: 400px;
+    padding: $space-md;
+    border-radius: $border-radius-md;
+  }
+}

@@ -54,3 +54,10 @@ header.header {
     }
   }
 }
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: $space-sm;
+}

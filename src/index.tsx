@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AppWrapper } from "./components/AppWrapper";
-import { Home } from "./Pages/Home";
-import { PrivacyPolicy } from "./Pages/PrivacyPolicy";
-import { TermsOfUse } from "./Pages/TermsOfUse";
+import { Home } from "./pages/Home";
+import { PrivacyPolicy } from "./pages/PrivacyPolicy";
+import { TermsOfUse } from "./pages/TermsOfUse";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./context/AuthContext/provider";
 

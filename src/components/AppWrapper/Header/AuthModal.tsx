@@ -10,6 +10,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 const loginSchema = z.object({
+  name: z.string().optional(),
   email: z.string().email("Invalid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
@@ -18,9 +19,10 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export const AuthModal = ({ onClose }: { onClose: () => void }) => {
   const navigate = useNavigate();
-  const { isLoginPending, login } = useAuth();
 
   const [isLogin, setIsLogin] = useState(true);
+
+  const { isLoginPending, login, register: registerUser } = useAuth();
 
   const {
     register,
@@ -32,7 +34,21 @@ export const AuthModal = ({ onClose }: { onClose: () => void }) => {
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
-      await login(data);
+      if (isLogin) {
+        await login(data);
+      } else {
+        if (!data.name || data.name.trim() === "") {
+          toast.error("Name is required for registration.");
+
+          return;
+        }
+
+        await registerUser({
+          name: data.name,
+          email: data.email,
+          password: data.password,
+        });
+      }
 
       onClose();
       navigate("/");
@@ -53,6 +69,13 @@ export const AuthModal = ({ onClose }: { onClose: () => void }) => {
   return (
     <Modal onClose={onClose} headerText="Authentication">
       <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
+        {!isLogin && (
+          <label>
+            Name:
+            <Input type="text" {...register("name")} />
+          </label>
+        )}
+
         <label>
           Email:
           <Input type="email" {...register("email")} />
@@ -72,7 +95,7 @@ export const AuthModal = ({ onClose }: { onClose: () => void }) => {
           type="submit"
           disabled={isSubmitting || isLoginPending}
         >
-          {isLoginPending ? "Loading..." : "Sign In"}
+          {isLoginPending ? "Loading..." : isLogin ? "Sign In" : "Sign Up"}
         </Button>
 
         <Button

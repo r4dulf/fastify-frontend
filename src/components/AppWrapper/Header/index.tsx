@@ -4,15 +4,16 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../../Button";
 import { useAuth } from "../../../context/AuthContext/useAuth";
 import { AuthModal } from "./AuthModal";
+import { LoginModalContext } from "../../../context/LoginModalContext";
 
 import "./index.scss";
-import { LoginModalContext } from "../../../context/LoginModalContext";
 
 export const Header = () => {
   const navigate = useNavigate();
   const { isAuthenticated, isLoading } = useAuth();
 
   const [searchQuery, setSearchQuery] = useState("");
+
   const { isOpen, closeModal, openModal } = useContext(LoginModalContext);
 
   return (

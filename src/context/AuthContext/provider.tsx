@@ -50,9 +50,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }) => {
       const response = await register({ name, email, password });
 
-      localStorage.setItem("token", response.token);
+      setToken(response.token);
     },
-    [register]
+    [register, setToken]
   );
 
   useEffect(() => {

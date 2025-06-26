@@ -46,6 +46,16 @@ export const Header = () => {
             placeholder="Search events..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                if (searchQuery.trim()) {
+                  e.preventDefault();
+                  navigate(`/events?search=${encodeURIComponent(searchQuery)}`);
+                } else {
+                  navigate("/events");
+                }
+              }
+            }}
           />
         </div>
 

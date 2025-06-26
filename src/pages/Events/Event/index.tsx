@@ -1,24 +1,29 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useEventQuery, usePutEvent } from "../../../api/query/events";
+import toast from "react-hot-toast";
+import {
+  useDeleteEvent,
+  useEventQuery,
+  usePutEvent,
+} from "../../../api/query/events";
 import { LoadingSpinner } from "../../../components/LoadingSpinner";
 import { Button } from "../../../components/Button";
 import { useAuth } from "../../../context/AuthContext/useAuth";
-import toast from "react-hot-toast";
-
-import "./index.scss";
 import { useState } from "react";
 import { EventForm } from "./EventForm";
+
+import "./index.scss";
 
 export const EventPage = () => {
   const navigate = useNavigate();
 
-  const { user, isAdmin, isAuthenticated } = useAuth();
   const params = useParams<{ id: string }>();
-  const { data: event, isLoading } = useEventQuery(params.id || "");
-
   const { mutateAsync: putEvent } = usePutEvent();
+  const { mutateAsync: deleteEvent } = useDeleteEvent();
 
   const [isEditMode, setIsEditMode] = useState(false);
+
+  const { user, isAdmin, isAuthenticated } = useAuth();
+  const { data: event, isLoading } = useEventQuery(params.id || "");
 
   if (isLoading) {
     return (
@@ -42,7 +47,9 @@ export const EventPage = () => {
     );
   }
 
-  const isEditable = (user && user.id === event.createdByUserId) || isAdmin;
+  const createdByUser = user && event.createdByUserId === user?.id;
+  const isEditable = createdByUser || isAdmin;
+  const canBeDeleted = createdByUser || isAdmin;
 
   return (
     <div className="event page">
@@ -115,6 +122,33 @@ export const EventPage = () => {
               >
                 Register for Event
               </Button>
+
+              {canBeDeleted && (
+                <Button
+                  kind="danger"
+                  onClick={async () => {
+                    if (
+                      !window.confirm(
+                        "Are you sure you want to delete this event?"
+                      )
+                    ) {
+                      return;
+                    }
+
+                    try {
+                      await deleteEvent(event.key);
+
+                      toast.success("Event deleted successfully!");
+
+                      navigate("/events");
+                    } catch {
+                      toast.error("Failed to delete event.");
+                    }
+                  }}
+                >
+                  Delete Event
+                </Button>
+              )}
 
               <Button kind="secondary" onClick={() => navigate("/events")}>
                 Back to Events

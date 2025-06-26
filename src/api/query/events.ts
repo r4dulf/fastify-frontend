@@ -120,3 +120,50 @@ export const usePostEvent = (
     mutationFn: (vars) => postEvent(vars),
   });
 };
+
+const deleteEvent = async (key: string) => {
+  await fetcher(`/events/${key}`, {
+    method: "DELETE",
+    body: JSON.stringify({ key }),
+  });
+};
+
+type UseDeleteEventMutationOptions = UseMutationOptions<
+  void,
+  Error,
+  string,
+  { previousEvents: Event[] }
+>;
+
+export const useDeleteEvent = (
+  options?: Partial<UseDeleteEventMutationOptions>
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: [PUT_KEY, EVENTS_KEY],
+    mutationFn: deleteEvent,
+
+    onMutate: (key) => {
+      queryClient.cancelQueries({ queryKey: [EVENTS_KEY] });
+
+      const previousEvents = queryClient.getQueryData<Event[]>([EVENTS_KEY]);
+
+      queryClient.setQueryData<Event[]>([EVENTS_KEY], (old) =>
+        old?.filter((e) => e.key !== key)
+      );
+
+      return { previousEvents: previousEvents ?? [] };
+    },
+
+    onError: (_err, _vars, context) => {
+      queryClient.setQueryData<Event[]>([EVENTS_KEY], context?.previousEvents);
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [EVENTS_KEY] });
+    },
+
+    ...options,
+  });
+};

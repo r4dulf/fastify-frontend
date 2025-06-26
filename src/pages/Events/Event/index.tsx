@@ -4,6 +4,7 @@ import {
   useDeleteEvent,
   useEventQuery,
   usePutEvent,
+  useRegisterToEvent,
 } from "../../../api/query/events";
 import { LoadingSpinner } from "../../../components/LoadingSpinner";
 import { Button } from "../../../components/Button";
@@ -24,6 +25,8 @@ export const EventPage = () => {
 
   const { user, isAdmin, isAuthenticated } = useAuth();
   const { data: event, isLoading } = useEventQuery(params.id || "");
+
+  const { mutateAsync: registerForEvent } = useRegisterToEvent();
 
   if (isLoading) {
     return (
@@ -108,20 +111,26 @@ export const EventPage = () => {
                 </Button>
               )}
 
-              <Button
-                kind="primary"
-                onClick={() => {
-                  if (!isAuthenticated) {
-                    toast.error(
-                      "You must be logged in to register for an event."
-                    );
+              {!createdByUser && (
+                <Button
+                  kind="primary"
+                  onClick={async () => {
+                    if (!isAuthenticated) {
+                      toast.error(
+                        "You must be logged in to register for an event."
+                      );
 
-                    return;
-                  }
-                }}
-              >
-                Register for Event
-              </Button>
+                      return;
+                    }
+
+                    await registerForEvent({ eventKey: event.key });
+
+                    toast.success("Registered for event successfully!");
+                  }}
+                >
+                  Register for Event
+                </Button>
+              )}
 
               {canBeDeleted && (
                 <Button

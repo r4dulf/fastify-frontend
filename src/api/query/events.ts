@@ -167,3 +167,33 @@ export const useDeleteEvent = (
     ...options,
   });
 };
+
+const registerToEvent = async ({
+  eventKey,
+  registrationKey,
+}: {
+  eventKey: string;
+  registrationKey?: string;
+}) => {
+  const res = await fetcher<Promise<{ data: { success: boolean } }>>(
+    `/events/${eventKey}/register`,
+    {
+      method: "POST",
+      body: JSON.stringify({ key: registrationKey }),
+    }
+  );
+
+  return res.data;
+};
+
+export const useRegisterToEvent = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: registerToEvent,
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [EVENTS_KEY] });
+    },
+  });
+};
